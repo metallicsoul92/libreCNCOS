@@ -27,7 +27,7 @@ void free(void *ptr);
 int system(const char *command);
 char *getenv(const char *name);
 
-// Process control functions
+// Mathematical functions to compute the absolute value of integers
 int abs(int n);
 long labs(long n);
 long long llabs(long long n);

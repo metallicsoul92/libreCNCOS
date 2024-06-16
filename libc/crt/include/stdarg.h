@@ -1,13 +1,17 @@
 #ifndef LCNC_LC_CRT_STDARG_H
 #define LCNC_LC_CRT_STDARG_H
 
-// Define va_list type
-typedef char * va_list;
 
-// Macros for va_start, va_arg, va_end
-#define va_start(ap, param)  (ap = (va_list)&param + sizeof(param))
-#define va_arg(ap, type)     (*(type *)((ap += sizeof(type)) - sizeof(type)))
-#define va_end(ap)           (ap = (va_list)0)
-#define va_copy(dest, src)   (dest = src)
+//define the va_list type.
+#ifndef HAS_VARG
+typedef char * va_list;
+#define HAS_VARG 1
+#endif
+
+#define va_start(marker, last)  { marker = (va_list)&last + sizeof(last); }
+#define va_arg(marker, type)    (*((type *)((marker += sizeof(type)) - sizeof(type))))
+
+#define va_copy(dest, src)      ((dest) = (src))
+#define va_end(marker)          ((marker) = (va_list) 0)
 
 #endif /* _STDARG_H */
