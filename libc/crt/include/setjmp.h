@@ -3,16 +3,14 @@
 
 // Define a type to hold the state information
 typedef struct {
-    long rbx;    // Callee-saved register
-    long rbp;    // Base pointer
-    long r12;    // Callee-saved register
-    long r13;    // Callee-saved register
-    long r14;    // Callee-saved register
-    long r15;    // Callee-saved register
-    long rsp;    // Stack pointer
-    long rip;    // Instruction pointer
+    unsigned long long rbp;   // Base pointer
+    unsigned long long rsp;   // Stack pointer
+    unsigned long long rip;   // Instruction pointer
+    unsigned long long rdi;   // General purpose register
+    unsigned long long rsi;   // General purpose register
+    unsigned long long rdx;   // General purpose register
+    unsigned long long rcx;   // General purpose register
 } jmp_buf[1];
-
 
 // Save the current execution state
 int setjmp(jmp_buf env);

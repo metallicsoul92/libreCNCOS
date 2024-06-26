@@ -14,15 +14,15 @@
 #define TTY_HIGH_BYTE_COMMAND    14
 #define TTY_LOW_BYTE_COMMAND     15
 
-_terminalInfo terminalInfo;
+terminalInfo_t terminalInfo;
 
-_terminalInfo* getTerminalInfo() {
+terminalInfo_t* getTerminalInfo() {
     return &terminalInfo;
 }
 
 static uint16_t s_buffer[80 * 1024];
 
-_terminalColor getColor(uint8_t color) {
+terminalColor_t getColor(uint8_t color) {
     _terminalColor out;
     out.foreground = color & 0xF;
     out.background = (color >> 4) & 0xF;

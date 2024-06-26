@@ -1,43 +1,31 @@
 #ifndef LCNC_KERNEL_IDT_H
 #define LCNC_KERNEL_IDT_H
 
+#ifndef __HAS_STDINT
+#define __HAS_STDINT
 #include <stdint.h>
-#include <stddef.h>
+#endif
 
-#ifdef __x86_64__
 
+// Structure for an IDT entry
 typedef struct {
-    uint16_t base_low;
-    uint16_t sel;
-    uint8_t ist;          // Bits 0-2 holds Interrupt Stack Table offset, rest of bits zero.
-    uint8_t flags;        // Type and attributes
-    uint16_t base_middle;
-    uint32_t base_high;
-    uint32_t zero;        // Reserved
+    uint16_t offset_low;    // Lower 16 bits of handler function address
+    uint16_t selector;      // Kernel segment selector
+    uint8_t ist;            // Bits 0-2 hold Interrupt Stack Table offset, rest are zero
+    uint8_t type_attr;      // Type and attributes
+    uint16_t offset_middle; // Middle 16 bits of handler function address
+    uint32_t offset_high;   // Higher 32 bits of handler function address
+    uint32_t zero;          // Reserved, set to zero
 } __attribute__((packed)) idt_entry_t;
 
+// Structure for the IDT pointer
 typedef struct {
-    uint16_t limit;
-    uint64_t base;
-} __attribute__((packed)) idt_pointer_t;
+    uint16_t limit; // Limit of the table (size - 1)
+    uint64_t base;  // Base address of the IDT
+} __attribute__((packed)) idt_ptr_t;
 
-static struct {
-    idt_entry_t entries[256];
-    idt_pointer_t pointer;
-} idt __attribute__((used));
-
-#define ENTRY(X) (idt.entries[(X)])
-
-typedef void (*idt_gate_t)(void);
-
-extern void idt_load(uintptr_t);
-
-void idt_set_gate(uint8_t num, idt_gate_t base, uint16_t sel, uint8_t flags);
-
-void idt_install(void);
-
-#undef ENTRY
-
-#endif // __x86_64__
+// Function declarations
+void idt_set_gate(int num, uint64_t base, uint16_t sel, uint8_t flags);
+void idt_install();
 
 #endif // IDT_H

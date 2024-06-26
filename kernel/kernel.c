@@ -1,5 +1,7 @@
 #include <stdint.h>
+#include "../../include/kernel/tty.h"
 
+#include "../../include/kernel/tty.h"
 // Forward declaration of the assembly function
 extern void enter_protected_mode(void);
 extern void enter_long_mode(void);
@@ -22,6 +24,8 @@ void kmain(void) {
 
 void pm_main(void) {
     // This function runs in protected mode
+    initializeTerminal();
+    setupMemory();
     while (1) {
         // Main loop of the kernel
     }

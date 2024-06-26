@@ -1,7 +1,7 @@
 #ifndef LCNC_KERNEL_VGA_H
 #define LCNC_KERNEL_VGA_H
 
-#define VMEM 0xB8000
+
 
 #include "../../libc/crt/include/stddef.h"
 
