@@ -1,6 +1,6 @@
 #include "../../include/kernel/mm/kmalloc.h"
 #include "../../include/kernel/mm/pmm.h"
-#include "../../include/kernel/mm/vmm.h"
+
 
 #define INITIAL_HEAP_SIZE (1024 * 1024) // 1MB initial heap
 #define EXPANSION_SIZE (1024 * 1024)    // 1MB expansion size
@@ -16,7 +16,8 @@ typedef struct Block {
 static uint8_t initial_heap[INITIAL_HEAP_SIZE];
 static Block* free_list = (Block*)initial_heap;
 
-void init_heap() {
+void init_heap(uint8_t* heap_start) {
+    free_list = (Block*)heap_start;
     free_list->size = INITIAL_HEAP_SIZE - BLOCK_SIZE;
     free_list->next = NULL;
     free_list->free = 1;
@@ -122,4 +123,41 @@ void kfree(void* ptr) {
     Block* block = (Block*)((uint8_t*)ptr - BLOCK_SIZE);
     block->free = 1;
     merge_blocks();
+}
+
+
+// Function to reallocate a memory block
+void* krealloc(void* ptr, size_t size) {
+    if (ptr == NULL) {
+        return kmalloc(size); // If ptr is NULL, behave like kmalloc
+    }
+
+    if (size == 0) {
+        kfree(ptr); // If size is 0, free the memory and return NULL
+        return NULL;
+    }
+
+    // Get the original block size
+    Block* block = (Block*)((uint8_t*)ptr - BLOCK_SIZE);
+    if (block->size >= size) {
+        // If the current block is already large enough, return the same pointer
+        if (block->size > size + BLOCK_SIZE) {
+            split_block(block, size); // Optionally, split the block if there's enough excess space
+        }
+        return ptr;
+    }
+
+    // Allocate a new block of the desired size
+    void* new_ptr = kmalloc(size);
+    if (new_ptr == NULL) {
+        return NULL; // Allocation failed
+    }
+
+    // Copy the contents of the old block to the new block
+    memcpy(new_ptr, ptr, block->size);
+
+    // Free the old block
+    kfree(ptr);
+
+    return new_ptr;
 }

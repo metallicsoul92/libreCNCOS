@@ -1,5 +1,5 @@
 #include "../../include/sys/stat.h"
-#include "../../../libc/include/errno.h"
+#include "../../../crt/include/errno.h"
 #include "../../include/unistd.h"
 #include "../../include/fcntl.h"  // For open
 

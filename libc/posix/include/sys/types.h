@@ -1,9 +1,10 @@
 #ifndef LCNC_LC_POSIX_SYS_TYPES_H
 #define LCNC_LC_POSIX_SYS_TYPES_H
 
-#include "../../crt/stddef.h"
-#include "../../crt/stddef.h"
-#include <time.h>
+
+#include "../../../crt/include/stddef.h"
+#include "../../../crt/include/stdint.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,6 +30,11 @@ typedef int ssize_t;
 
 #ifndef NULL
 #define NULL ((void *)0)
+#endif
+
+#ifndef __HAS_MAP_FAILED
+#define MAP_FAILED ((void*)-1)
+#define __HAS_MAP_FAILED
 #endif
 
 #ifdef __cplusplus

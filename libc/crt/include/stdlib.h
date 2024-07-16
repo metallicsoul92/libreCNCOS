@@ -1,6 +1,12 @@
 #ifndef LCNC_LC_CRT_STDLIB_H
 #define LCNC_LC_CRT_STDLIB_H
 
+
+#ifndef __HAS_STDDEF
+#include "stddef.h"
+#define __HAS_STDDEF
+#endif
+
 // Constants
 #define NULL ((void *)0)
 #define EXIT_SUCCESS 0

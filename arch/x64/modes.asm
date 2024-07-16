@@ -37,6 +37,7 @@ halt_pm:
     hlt
     jmp halt_pm
 
+bits 64
 enter_long_mode:
     cli                 ; Clear interrupts
 
@@ -44,27 +45,27 @@ enter_long_mode:
     ; (Assume the tables are already setup correctly)
 
     ; Load PML4 address into CR3
-    mov eax, cr3_addr
-    mov cr3, eax
+    mov rax, cr3_addr
+    mov cr3, rax
 
     ; Enable PAE (Physical Address Extension)
-    mov eax, cr4
-    or eax, 1 << 5
-    mov cr4, eax
+    mov rax, cr4
+    or rax, 1 << 5
+    mov cr4, rax
 
     ; Enable long mode
     mov ecx, 0xC0000080
     rdmsr
-    or eax, 1 << 8
+    or rax, 1 << 8
     wrmsr
 
     ; Enable paging
-    mov eax, cr0
-    or eax, 0x80000000
-    mov cr0, eax
+     mov rax, cr0
+     bts rax, 31           ; Set bit 31
+     mov cr0, rax
 
-    ; Far jump to clear prefetch queue and switch to long mode
-    jmp 0x08:long_mode_entry
+     ; Far jump to clear prefetch queue and switch to long mode
+     jmp far [long_mode_jump]
 
 bits 64
 long_mode_entry:
@@ -92,9 +93,15 @@ gdt:
 
 gdt_descriptor:
     dw gdt_end - gdt - 1   ; Limit
-    dd gdt                 ; Base
+    dq gdt                 ; Base
 
 gdt_end:
 
+long_mode_jump:
+    dw 0x08                  ; Segment selector
+    dq long_mode_entry       ; Offset
+
+section .bss
+align 4096
 cr3_addr:
-    dd 0x100000
+    resq 1

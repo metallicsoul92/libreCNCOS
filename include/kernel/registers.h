@@ -1,7 +1,10 @@
 #ifndef LCNC_KERNEL_REGISTERS_H
 #define LCNC_KERNEL_REGISTERS_H
 
-#include <stdint.h>
+#ifndef __HAS_STDINT
+#define __HAS_STDINT
+#include "../../libc/crt/include/stdint.h"
+#endif
 
 // Register state for x86-64
 typedef struct {

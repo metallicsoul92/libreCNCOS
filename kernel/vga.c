@@ -1,4 +1,5 @@
-#include "../include/vga.h"
+#include "../include/kernel/vga.h"
+
 
 #define VMEM 0xB8000
 
@@ -20,21 +21,12 @@ struct __videoInfo{
 };
 
 
+
+
 ////////////
 //Private API
 videoInfo_t _intVGA;  //internal VGA
 ////
-
-size_t vga_getVGAWidth(){
-  return _intVGA.videoWidth;
-}
-size_t vga_getVGAHeight(){
-  return _intVGA.videoHeight;
-}
-uint16_t * vga_getVGAMem(){
-  return _intVGA.videoMemory;
-}
-
 
 void initialize_vga_default(){
   _intVGA.videoMemory = (uint16_t*) VMEM;
@@ -45,4 +37,15 @@ void initialize_vga(size_t _width, size_t _height){
   _intVGA.videoMemory = (uint16_t*) VMEM;
   _intVGA.videoWidth = _width;
   _intVGA.videoHeight = _height;
+}
+
+
+size_t vga_getVGAWidth(){
+  return _intVGA.videoWidth;
+}
+size_t vga_getVGAHeight(){
+  return _intVGA.videoHeight;
+}
+uint16_t * vga_getVGAMem(){
+  return _intVGA.videoMemory;
 }

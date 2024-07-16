@@ -1,5 +1,5 @@
-#include "../include/tty.h"
-#include "../include/inlineAssembly.h"
+#include "../include/kernel/tty.h"
+#include "../include/kernel/io.h"
 #include "../libc/crt/include/string.h"
 #include "../libc/crt/include/stdarg.h"
 #include "../libc/crt/include/stdio.h"
@@ -23,7 +23,7 @@ terminalInfo_t* getTerminalInfo() {
 static uint16_t s_buffer[80 * 1024];
 
 terminalColor_t getColor(uint8_t color) {
-    _terminalColor out;
+    terminalColor_t out;
     out.foreground = color & 0xF;
     out.background = (color >> 4) & 0xF;
     return out;
@@ -128,9 +128,32 @@ char* kuitoab(unsigned int n, char s[], unsigned int base) {
     return s;
 }
 
-uint8_t colorTouint8(_terminalColor color) {
+uint8_t colorTouint8(terminalColor_t color) {
     return vga_entry_color(color.foreground, color.background);
 }
+
+
+//internal API
+int putchar(int c) {
+    // Convert the int to a char
+    char ch = (char)c;
+
+    // Check for special cases (e.g., non-printable characters)
+    if (c < 0 || c > 255) {
+        // Invalid character
+        return EOF;
+    }
+
+    // Use the terminalPutChar function to display the character
+    terminalPutChar(ch);
+
+    // Return the character as an integer (for success)
+    return c;
+}
+
+///
+
+
 
 void initializeTerminal() {
     initialize_vga_default();
@@ -202,7 +225,7 @@ void terminalWriteLine(const char* data) {
     terminalNewLine();
 }
 
-void terminalChangeColor(_terminalColor color) {
+void terminalChangeColor(terminalColor_t color) {
     terminalInfo.color = color;
 }
 

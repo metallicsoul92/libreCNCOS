@@ -1,6 +1,6 @@
 #include "../include/fcntl.h"
-#include"../../libc/include/stdarg.h"
-#include "../../libc/include/errno.h"
+#include "../../crt/include/stdarg.h"
+#include "../../crt/include/errno.h"
 #include "../include/unistd.h"
 
 

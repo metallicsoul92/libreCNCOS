@@ -1,5 +1,6 @@
-#include "../../include/kernel/pmm.h"
+#include "../../include/kernel/mm/pmm.h"
 #include "../../libc/crt/include/string.h"
+#include "../../include/kernel/mm/kmalloc.h"
 
 static uint8_t* bitmap;
 static size_t total_pages;
@@ -7,7 +8,7 @@ static size_t total_pages;
 void init_pmm(size_t total_memory) {
     total_pages = total_memory / PAGE_SIZE;
     size_t bitmap_size = total_pages / 8 + 1; // One bit per page
-    bitmap = (uint8_t*)basic_malloc(bitmap_size);
+    bitmap = (uint8_t*)basic_kmalloc(bitmap_size);
     memset(bitmap, 0, bitmap_size); // Mark all pages as free
 }
 

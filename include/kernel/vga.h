@@ -1,9 +1,16 @@
 #ifndef LCNC_KERNEL_VGA_H
 #define LCNC_KERNEL_VGA_H
 
-
-
+#ifndef __HAS_STDDEF
 #include "../../libc/crt/include/stddef.h"
+#define __HAS_STDDEF
+#endif
+
+
+#ifndef __HAS_STDINT
+#include "../../libc/crt/include/stdint.h"
+#define __HAS_STDINT
+#endif
 
 typedef struct __videoInfo videoInfo_t;
 
@@ -33,5 +40,8 @@ uint16_t vga_entry(unsigned char uc, uint8_t color);
 size_t vga_getVGAWidth();
 size_t vga_getVGAHeight();
 uint16_t * vga_getVGAMem();
+
+void initialize_vga_default();
+void initialize_vga(size_t _width, size_t _height);
 
 #endif

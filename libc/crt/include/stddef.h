@@ -26,7 +26,7 @@ typedef long ptrdiff_t;
 // Define wchar_t
 #ifndef _WCHAR_T
 #define _WCHAR_T
-typedef int wchar_t;
+typedef unsigned int wchar_t;
 #endif
 
 #endif /* LCNC_LC_CRT_STDDEF_H */

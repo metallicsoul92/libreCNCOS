@@ -1,7 +1,7 @@
 #include "../include/kernel/task.h"
-#include "../include/kernel/memory.h"
-#include "../include/kernel/kmalloc.h" // for kmalloc
-#include <string.h>
+#include "../include/kernel/mm/memory.h"
+#include "../include/kernel/mm/kmalloc.h" // for kmalloc
+#include "../libc/crt/include/string.h"
 
 // Initialize a global memory manager
 MemoryManager memory_manager;

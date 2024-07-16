@@ -1,9 +1,15 @@
 #ifndef _WCHAR_H
 #define _WCHAR_H
 
-#ifndef _WCHAR_T_DEFINED
+#ifndef __HAS_STDDEF
+#include "stddef.h"
+#define __HAS_STDDEF
+#endif
+
+
+#ifndef  _WCHAR_T
 typedef unsigned int wchar_t;  // Example: Define wchar_t as unsigned int
-#define _WCHAR_T_DEFINED
+#define  _WCHAR_T
 #endif /* _WCHAR_T_DEFINED */
 
 // Constants

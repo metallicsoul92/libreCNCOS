@@ -2,16 +2,20 @@
 #define LCNC_KERNEL_MM_MEMORY_H
 
 #ifndef __HAS_STDINT
-#include <stdint.h>
 #define __HAS_STDINT
+#include "../../../libc/crt/include/stdint.h"
 #endif
 
 #ifndef __HAS_STDDEF
-#include <stddef.h>
 #define __HAS_STDDEF
+#include "../../../libc/crt/include/stddef.h"
 #endif
 
-uint8_t setupMemory();
+
+extern uint8_t end; /* Symbol defined by the linker script */
+
+uint8_t setupMemory(void);
+
 
 typedef enum {
     MEMORY_REGION_SYSTEM = 0,

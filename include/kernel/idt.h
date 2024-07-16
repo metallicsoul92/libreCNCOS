@@ -3,7 +3,7 @@
 
 #ifndef __HAS_STDINT
 #define __HAS_STDINT
-#include <stdint.h>
+#include "../../libc/crt/include/stdint.h"
 #endif
 
 

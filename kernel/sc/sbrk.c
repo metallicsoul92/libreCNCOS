@@ -1,4 +1,5 @@
-#include <stddef.h>
+#include "../../libc/crt/include/stddef.h"   // For size_t, NULL
+#include "../../libc/crt/include/stdint.h"   // For uint8_t
 #include "../../include/kernel/syscalls.h"
 #include "../../include/kernel/mm/kmalloc.h"
 

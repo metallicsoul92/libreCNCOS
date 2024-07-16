@@ -1,7 +1,7 @@
 #ifndef LCNC_LC_POSIX_FCNTL_H
 #define LCNC_LC_POSIX_FCNTL_H
 
-#include <sys/types.h> // For off_t and pid_t
+#include "sys/types.h" // For off_t and pid_t
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,8 +1,15 @@
 #ifndef LCNC_KERNEL_TASK_H
 #define LCNC_KERNEL_TASK_H
 
-#include <stdint.h>
-#include <stddef.h>
+#ifndef __HAS_STDINT
+#define __HAS_STDINT
+#include "../../libc/crt/include/stdint.h"
+#endif
+
+#ifndef __HAS_STDDEF
+#define __HAS_STDDEF
+#include "../../libc/crt/include/stddef.h"
+#endif
 #include "registers.h"
 
 // Task states

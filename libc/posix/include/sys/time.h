@@ -1,7 +1,7 @@
 #ifndef LCNC_LC_POSIX_SYS_TIME_H
 #define LCNC_LC_POSIX_SYS_TIME_H
 
-#include "../../crt/time.h"
+#include "../../../crt/include/time.h"
 #include "types.h"
 
 

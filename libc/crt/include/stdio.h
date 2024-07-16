@@ -2,13 +2,23 @@
 #define LCNC_LC_CRT_STDIO_H
 
 // Include necessary headers
-#include <stddef.h>   // For size_t, NULL
-#include <stdarg.h>   // For va_list, va_start, va_arg, va_end
+#ifndef __HAS_STDDEF
+#include "stddef.h"
+#define __HAS_STDDEF
+#endif
+
+#ifndef __HAS_STDARG
+#include "stdarg.h"
+#define __HAS_STDARG
+#endif
+
 
 // File structure
 typedef struct FILE {
     // Implementation-specific details
 } FILE;
+
+#define EOF (-1)
 
 // Standard I/O streams
 extern FILE *stdin;    // Standard input stream
@@ -25,6 +35,7 @@ int printf(const char *format, ...);
 int fprintf(FILE *stream, const char *format, ...);
 int sprintf(char *str, const char *format, ...);
 int snprintf(char *str, size_t size, const char *format, ...);
+int vsprintf(char* buffer, const char* fmt, va_list parameters);
 
 // Formatted input functions
 int scanf(const char *format, ...);

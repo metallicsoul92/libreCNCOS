@@ -2,7 +2,7 @@
 #define LCNC_LC_POSIX_SYS_STAT_H
 
 #include "types.h"
-
+#include "time.h"
 // Define file mode bits
 #define S_IFMT   0170000 // bit mask for the file type bit fields
 #define S_IFSOCK 0140000 // socket

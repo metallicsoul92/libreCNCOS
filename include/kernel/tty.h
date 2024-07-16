@@ -1,6 +1,9 @@
 #ifndef LCNC_KERNEL_TTY_H_
 #define LCNC_KERNEL_TTY_H_
 
+//include for standard types
+#include "../../libc/crt/include/stdint.h"
+
 #include "vga.h"
 
 // Define the structure for video information

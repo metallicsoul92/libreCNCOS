@@ -4,6 +4,7 @@
 #include "../../libc/crt/include/stdbool.h"  // For bool, true, false
 #include "../../libc/crt/include/stdint.h"   // For uintptr_t
 #include "../../libc/crt/include/stddef.h"   // For size_t, NULL
+#include "../../libc/posix/include/sys/types.h" //For off_t
 
 #define PAGE_SIZE 4096  // Example page size, adjust as per your system
 

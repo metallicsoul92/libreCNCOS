@@ -9,7 +9,7 @@
   #define _SIGN
 #endif
 
-
+extern int errno;
 
 //This is based off Linux's error numbers
 

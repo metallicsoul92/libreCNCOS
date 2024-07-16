@@ -18,28 +18,36 @@
 
 
 
-char * basename(char * path){
-    char *p = strrchr (filename, '/');
-  return p ? p + 1 : (char *) filename;
+char *basename(char *path) {
+    if (path == NULL || *path == '\0') {
+        return ".";
+    }
+
+    char *p = strrchr(path, PTOKEN);
+    return p ? p + 1 : path;
 }
 
-char * dirname(char * path){
+char *dirname(char *path) {
+    static char dot[] = ".";
+    char *prevSlash;
 
-  static const char dot[] = ".";
-  char * prevSlash;
+    if (path == NULL || *path == '\0') {
+        return dot;
+    }
 
-  prevSlash = path != NULL ? strrchr(path, '/') : NULL;
+    prevSlash = strrchr(path, PTOKEN);
 
-  if(prevSlash == path){
-    ++prevSlash;
-  }else if ( prevSlash != NULL && prevSlash[1] == '\0'){
-    prevSlash = memchr(path, prevSlash-path, '/');
-  }
+    if (prevSlash == path) {
+        ++prevSlash;
+    } else if (prevSlash != NULL && prevSlash[1] == '\0') {
+        prevSlash = memchr(path, prevSlash - path, PTOKEN);
+    }
 
-  if(prevSlash !=NULL){
-    prevSlash[0] = '\0';
-  }else
+    if (prevSlash != NULL) {
+        prevSlash[0] = '\0';
+    } else {
+        path = dot;
+    }
 
-  path = (char *)dot;
-  return path;
+    return path;
 }

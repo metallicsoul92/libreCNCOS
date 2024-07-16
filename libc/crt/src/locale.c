@@ -1,7 +1,7 @@
-#include "../../include/locale.h"
+#include "../include/locale.h"
 
-#include "../../include/stdlib.h"
-#include "../../include/string.h"
+#include "../include/stdlib.h"
+#include "../include/string.h"
 
 // Internal representation of the current locale
 static locale_t current_locale = {
