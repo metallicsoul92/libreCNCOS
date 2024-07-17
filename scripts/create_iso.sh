@@ -29,16 +29,21 @@ mkdir -p $ISO_DIR/var/log
 
 # Copy the kernel binary
 cp bin/kernel.bin $BOOT_DIR/
+# Copy the loader into the ISODIR
+cp bin/loader $BOOT_DIR/
 
 # Create grub.cfg
 cat > $GRUB_DIR/grub.cfg <<EOF
-set timeout=5
+# tools/grub.cfg
+set timeout=0
 set default=0
 
 menuentry "libreCNCOS" {
-    multiboot2 /boot/kernel.bin
+    multiboot /boot/loader
+    module /boot/kernel
     boot
 }
+
 EOF
 
 # Create the ISO image

@@ -1,17 +1,31 @@
-GCC = gcc
+# Makefile for libc crt
 
-CFLAGS = -ffreestanding -nostdlib -I../../include
-OBJDIR = ../../../bin/libc/crt
+# Toolchain
+CC = gcc
 
-SRCS = errno.c locale.c math.c setjmp.c signal.c stdio.c stdlib.c string.c time.c wchar.c
-OBJS = $(SRCS:.c=.o)
+# Directories
+SRCDIR = .
+BUILDDIR = ../../../bin
+OBJDIR = $(BUILDDIR)/obj/libc/crt
+LIBCDIR = $(BUILDDIR)/libc
 
-.PHONY: all clean
+# Flags
+CFLAGS = -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 
+# Sources
+CSRCS = $(wildcard *.c)
+
+# Objects
+OBJS = $(CSRCS:%.c=$(OBJDIR)/%.o)
+
+# Targets
 all: $(OBJS)
 
-%.o: %.c
-	$(GCC) $(CFLAGS) -c $< -o $(OBJDIR)/$@
+# Compile C files
+$(OBJDIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
+# Clean
 clean:
 	rm -f $(OBJDIR)/*.o
