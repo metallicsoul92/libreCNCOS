@@ -1,9 +1,21 @@
 #include "../include/loader/pmodestructs.h"
 #include "../include/multiboot.h"
-#include "../include/kernel/pml4.h"
-#include "../include/kernel/pml5.h"
+#include "../libc/crt/include/stddef.h"
 
-/*GDT functions */
+/* 32-bit loader data structures */
+// GDT
+gdtEntry32_t gdt_32[3];
+gdtPtr32_t gdtp_32;
+
+/* Paging structures */
+// Placeholder for the generic page table
+page_entry_t *page_table;
+
+/* PML4 and PML5 tables */
+static page_entry_t pml4_table[512] __attribute__((aligned(4096)));
+static page_entry_t pml5_table[512] __attribute__((aligned(4096)));
+
+/* GDT functions */
 // Function to set up a GDT entry in 32-bit mode
 void set_gdt_entry_32(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
     gdt_32[num].base_low = (base & 0xFFFF);
@@ -30,12 +42,46 @@ void init_gdt_32() {
     __asm__ __volatile__ ("lgdt (%0)" : : "r" (&gdtp_32));
 }
 
+// PML4 functions
+void setup_pml4(page_entry_t *pml4) {
+    // Initialize PML4 table here
+    // This is a placeholder, you should fill in the actual initialization code
+    for (int i = 0; i < 512; i++) {
+        pml4[i] = 0;
+    }
+}
+
+page_entry_t* get_pml4_table() {
+    return pml4_table;
+}
+
+// PML5 functions
+void setup_pml5(page_entry_t *pml5) {
+    // Initialize PML5 table here
+    // This is a placeholder, you should fill in the actual initialization code
+    for (int i = 0; i < 512; i++) {
+        pml5[i] = 0;
+    }
+}
+
+page_entry_t* get_pml5_table() {
+    return pml5_table;
+}
+
+int is_pml5_supported() {
+    // Implement the check for PML5 support
+    // This is a placeholder, you should replace it with the actual check
+    return 0;
+}
+
 // Function to initialize paging structures
 void init_paging() {
     if (is_pml5_supported()) {
-        setup_pml5();
+        page_table = get_pml5_table();
+        setup_pml5(page_table);
     } else {
-        setup_pml4();
+        page_table = get_pml4_table();
+        setup_pml4(page_table);
     }
 }
 
@@ -57,9 +103,8 @@ void enable_long_mode() {
         : : : "eax", "ecx", "edx"
     );
     // Load PML4 or PML5 table address into CR3
-    uint64_t cr3_addr = get_paging_table();
     __asm__ __volatile__ (
-        "mov %0, %%cr3" : : "r" (cr3_addr)
+        "mov %0, %%cr3" : : "r" (page_table)
     );
     // Enable paging
     __asm__ __volatile__ (
@@ -92,10 +137,10 @@ void lmain(const void* multiboot_struct) {
     }
 
     if (kernel_entry) {
-      // Initialize paging structures
-            init_paging();
-            // Enable long mode and set up paging
-            enable_long_mode();
+        // Initialize paging structures
+        init_paging();
+        // Enable long mode and set up paging
+        enable_long_mode();
 
         // Jump to the 64-bit kernel entry point
         __asm__ __volatile__ (

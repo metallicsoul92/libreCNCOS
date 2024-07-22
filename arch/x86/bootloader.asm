@@ -1,7 +1,7 @@
-; loader.asm
 BITS 32
 GLOBAL _start
 EXTERN lmain
+EXTERN init_gdt_32
 EXTERN setup_pml4
 EXTERN setup_pml5
 EXTERN is_pml5_supported
@@ -12,9 +12,11 @@ SECTION .multiboot
 ALIGN 4
 magic:          dd 0x1BADB002        ; Magic number
 flags:          dd 0x00000003        ; Flags
-checksum:       dd -(magic + flags)  ; Checksum
+checksum:       dd -(0x1BADB002 + 0x00000003)  ; Checksum
 
-start:
+SECTION .text
+ALIGN 4
+_start:
     ; Setup stack
     mov esp, 0x9FB00
 
@@ -30,3 +32,7 @@ start:
 
     ; Setup GDT
     call init_gdt_32
+
+    ; Jump to the main loader function
+    call lmain
+    hlt

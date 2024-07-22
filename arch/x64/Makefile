@@ -1,16 +1,40 @@
-NASM = nasm
-OBJDIR = ../../bin/arch/x64
+# Makefile for 64-bit kernel
 
-SRCS = kernel_entry.asm idt.asm io.asm modes.asm crti.asm crtn.asm gdt.asm isr_stub.asm paging.asm
-OBJS = $(addprefix $(OBJDIR)/,$(SRCS:.asm=.o))
+# Toolchain
+CC = gcc
+AS = nasm
+LD = ld
 
-.PHONY: all clean
+# Directories
+SRCDIR = .
+BUILDDIR = ../../bin
+OBJDIR = $(BUILDDIR)/obj/arch/x64
+KERNELDIR = $(BUILDDIR)/kernel
+TOOLSDIR = ../../tools
+# Flags
+CFLAGS = -m64 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
+LDFLAGS = -m elf_x86_64 -T $(TOOLSDIR)/kernellinker.ld
+ASFLAGS = -f elf64
 
-all: $(OBJS)
+# Sources
+ASMSRCS = $(wildcard *.asm)
 
-$(OBJDIR)/%.o: %.asm
-	@mkdir -p $(OBJDIR)
-	$(NASM) -f elf64 $< -o $@
+# Objects
+OBJS = $(ASMSRCS:%.asm=$(OBJDIR)/%.o)
 
+# Targets
+all: $(KERNELDIR)/kernel
+
+# Build kernel
+$(KERNELDIR)/kernel: $(OBJS)
+	mkdir -p $(KERNELDIR)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+# Compile assembly files
+$(OBJDIR)/%.o: $(SRCDIR)/%.asm
+	mkdir -p $(OBJDIR)
+	$(AS) $(ASFLAGS) -o $@ $<
+
+# Clean
 clean:
-	rm -f $(OBJDIR)/*.o
+	rm -f $(OBJDIR)/*.o $(KERNELDIR)/kernel

@@ -3,12 +3,13 @@
 
 #ifndef __HAS_STDINT
 #define __HAS_STDINT
-#include <stdint.h>
+#include "../../../../libc/crt/include/stdint.h"
+
 #endif
 
 #ifndef __HAS_STDDEF
 #define __HAS_STDDEF
-#include <stddef.h>
+#include "../../../../libc/crt/include/stddef.h"
 #endif
 
 // Enum to differentiate between file and directory entries

@@ -19,7 +19,12 @@ CSRCS = $(wildcard *.c)
 OBJS = $(CSRCS:%.c=$(OBJDIR)/%.o)
 
 # Targets
-all: $(OBJS)
+all: $(LIBCDIR)/libc_posix.a
+
+# Create static library
+$(LIBCDIR)/libc_posix.a: $(OBJS)
+	mkdir -p $(LIBCDIR)
+	ar rcs $@ $(OBJS)
 
 # Compile C files
 $(OBJDIR)/%.o: %.c
@@ -28,4 +33,4 @@ $(OBJDIR)/%.o: %.c
 
 # Clean
 clean:
-	rm -f $(OBJDIR)/*.o
+	rm -f $(OBJDIR)/*.o $(LIBCDIR)/libc_posix.a

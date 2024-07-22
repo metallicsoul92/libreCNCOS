@@ -1,17 +1,36 @@
-GCC = gcc
+# Makefile for osutils
 
-CFLAGS = -ffreestanding -nostdlib -Iinclude
-OBJDIR = ../bin/osutils
+# Toolchain
+CC = gcc
 
-SRCS = io_utils.c
-OBJS = $(SRCS:.c=.o)
+# Directories
+SRCDIR = .
+BUILDDIR = ../bin
+OBJDIR = $(BUILDDIR)/obj/osutils
+LIBDIR = $(BUILDDIR)/osutils
 
-.PHONY: all clean
+# Flags
+CFLAGS = -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 
-all: $(OBJS)
+# Sources
+CSRCS = $(wildcard *.c)
 
-%.o: %.c
-	$(GCC) $(CFLAGS) -c $< -o $(OBJDIR)/$@
+# Objects
+OBJS = $(CSRCS:%.c=$(OBJDIR)/%.o)
 
+# Targets
+all: $(LIBDIR)/osutils.a
+
+# Create static library
+$(LIBDIR)/osutils.a: $(OBJS)
+	mkdir -p $(LIBDIR)
+	ar rcs $@ $(OBJS)
+
+# Compile C files
+$(OBJDIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Clean
 clean:
-	rm -f $(OBJDIR)/*.o
+	rm -f $(OBJDIR)/*.o $(LIBDIR)/osutils.a

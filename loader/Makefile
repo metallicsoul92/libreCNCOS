@@ -2,42 +2,34 @@
 
 # Toolchain
 CC = gcc
-AS = nasm
-LD = ld
 
 # Directories
 SRCDIR = .
-BUILDDIR = ../../bin
-OBJDIR = $(BUILDDIR)/obj
+BUILDDIR = ../bin
+OBJDIR = $(BUILDDIR)/obj/loader
 LOADERDIR = $(BUILDDIR)/loader
-
+TOOLSDIR = ../tools
 # Flags
 CFLAGS = -m32 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
-LDFLAGS = -m elf_i386 -T linker.ld
-ASFLAGS = -f elf32
 
 # Sources
-ASMSRCS = bootloader.asm
-CSRCS = lmain.c
+CSRCS = $(wildcard *.c)
 
 # Objects
-OBJS = $(ASMSRCS:.asm=.o) $(CSRCS:.c=.o)
+OBJS = $(CSRCS:%.c=$(OBJDIR)/%.o)
 
 # Targets
 all: $(LOADERDIR)/loader
 
-# Build loader
+# Create 32-bit loader
 $(LOADERDIR)/loader: $(OBJS)
 	mkdir -p $(LOADERDIR)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS)
-
-# Compile assembly files
-%.o: %.asm
-	$(AS) $(ASFLAGS) -o $(OBJDIR)/$@ $<
+	ld -m elf_i386 -T $(TOOLSDIR)/loaderlinker.ld -o $@ $(OBJS)
 
 # Compile C files
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $(OBJDIR)/$@ $<
+$(OBJDIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Clean
 clean:

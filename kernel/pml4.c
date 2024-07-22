@@ -1,7 +1,7 @@
 // pml4.c
 
 #include "../include/kernel/pml4.h"
-#include <stddef.h>
+#include "../libc/crt/include/stddef.h"
 
 // Zero out the entire table
 static void clear_table(page_entry_t *table) {

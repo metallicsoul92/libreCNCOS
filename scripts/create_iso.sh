@@ -1,40 +1,40 @@
-#!/bin/bash
+#!/bin/sh
 
-# Define the target directories
-ISO_DIR="iso"
-BOOT_DIR="$ISO_DIR/boot"
-GRUB_DIR="$BOOT_DIR/grub"
+# Create ISO directory structure
+ISO_DIR=isodir
 
-# Create POSIX-compliant directory structure
-mkdir -p $GRUB_DIR
+mkdir -p $ISO_DIR/boot/grub
 mkdir -p $ISO_DIR/bin
 mkdir -p $ISO_DIR/dev
 mkdir -p $ISO_DIR/etc
 mkdir -p $ISO_DIR/home
 mkdir -p $ISO_DIR/lib
 mkdir -p $ISO_DIR/mnt
-mkdir -p $ISO_DIR/opt
 mkdir -p $ISO_DIR/proc
 mkdir -p $ISO_DIR/root
-mkdir -p $ISO_DIR/run
 mkdir -p $ISO_DIR/sbin
-mkdir -p $ISO_DIR/srv
 mkdir -p $ISO_DIR/sys
 mkdir -p $ISO_DIR/tmp
-mkdir -p $ISO_DIR/usr/bin
-mkdir -p $ISO_DIR/usr/lib
-mkdir -p $ISO_DIR/usr/sbin
+mkdir -p $ISO_DIR/usr
 mkdir -p $ISO_DIR/var
-mkdir -p $ISO_DIR/var/log
 
-# Copy the kernel binary
-cp bin/kernel.bin $BOOT_DIR/
-# Copy the loader into the ISODIR
-cp bin/loader $BOOT_DIR/
+# Additional directories for the libraries and drivers
+mkdir -p $ISO_DIR/usr/lib
+mkdir -p $ISO_DIR/usr/lib/osutils
+mkdir -p $ISO_DIR/usr/lib/drivers
+
+# Copy the loader and kernel
+cp bin/loader $ISO_DIR/boot/loader
+cp bin/kernel $ISO_DIR/boot/kernel
+
+# Copy the libraries
+cp bin/libc_crt.a $ISO_DIR/usr/lib/
+cp bin/libc_posix.a $ISO_DIR/usr/lib/
+cp bin/osutils.a $ISO_DIR/usr/lib/osutils/
+cp bin/drivers_fs_vfs.a $ISO_DIR/usr/lib/drivers/
 
 # Create grub.cfg
-cat > $GRUB_DIR/grub.cfg <<EOF
-# tools/grub.cfg
+cat > $ISO_DIR/boot/grub/grub.cfg << EOF
 set timeout=0
 set default=0
 
@@ -43,13 +43,7 @@ menuentry "libreCNCOS" {
     module /boot/kernel
     boot
 }
-
 EOF
 
-# Create the ISO image
+# Create the ISO
 grub-mkrescue -o libreCNCOS.iso $ISO_DIR
-
-# Clean up
-rm -rf $ISO_DIR
-
-echo "ISO image created as libreCNCOS.iso"
