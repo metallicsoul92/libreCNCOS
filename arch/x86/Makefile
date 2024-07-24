@@ -20,25 +20,26 @@ ASFLAGS = -f elf32
 
 # Sources
 ASMSRCS = bootloader.asm
-CSRCS = lmain.c
+CSRCS = $(wildcard $(CSRCDIR)/*.c)
 
 # Objects
-OBJS = $(ASMSRCS:%.asm=$(OBJDIR)/%.o) $(CSRCS:%.c=$(OBJDIR)/%.o)
+ASMOBJS = $(ASMSRCS:%.asm=$(OBJDIR)/%.o)
+COBJS = $(CSRCS:$(CSRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # Targets
 all: $(LOADERDIR)/loader
 
 # Build loader
-$(LOADERDIR)/loader: $(OBJS)
+$(LOADERDIR)/loader: $(ASMOBJS) $(COBJS)
 	mkdir -p $(LOADERDIR)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(ASMOBJS) $(COBJS)
 
 # Compile assembly files
 $(OBJDIR)/%.o: $(SRCDIR)/%.asm
 	mkdir -p $(OBJDIR)
 	$(AS) $(ASFLAGS) -o $@ $<
 
-# Compile C files
+# Compile C files from loader
 $(OBJDIR)/%.o: $(CSRCDIR)/%.c
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<

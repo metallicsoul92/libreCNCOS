@@ -9,6 +9,7 @@ BUILDDIR = ../bin
 OBJDIR = $(BUILDDIR)/obj/loader
 LOADERDIR = $(BUILDDIR)/loader
 TOOLSDIR = ../tools
+
 # Flags
 CFLAGS = -m32 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 

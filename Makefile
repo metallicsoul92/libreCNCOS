@@ -23,14 +23,15 @@ kernel:
 
 isodir:
 	mkdir -p isodir/boot/grub
-	mkdir -p isodir/lib
+	mkdir -p isodir/usr/lib/osutils
+	mkdir -p isodir/usr/lib/drivers
 	cp bin/loader isodir/boot/loader
 	cp bin/kernel isodir/boot/kernel
 	cp bin/libc_crt.a isodir/usr/lib/
 	cp bin/libc_posix.a isodir/usr/lib/
 	cp bin/osutils.a isodir/usr/lib/osutils/
 	cp bin/drivers_fs_vfs.a isodir/usr/lib/drivers/
-	cp scripts/grub.cfg isodir/boot/grub
+	cp tools/grub.cfg isodir/boot/grub
 
 iso: isodir
 	grub-mkrescue -o libreCNCOS.iso isodir
